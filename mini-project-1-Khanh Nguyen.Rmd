@@ -85,8 +85,11 @@ And that is exactly the first thing that you will do!
 <!-------------------------- Start your work below ---------------------------->
 
 1: apt_buildings
+
 2: cancer_sample
+
 3: flow_sample
+
 4: vancouver_trees
 
 <!----------------------------------------------------------------------------->
@@ -96,7 +99,7 @@ And that is exactly the first thing that you will do!
 *Hint:* This is one of those times when you should think about the cleanliness of your analysis. I added a single code chunk for you below, but do you want to use more than one? Would you like to write more comments outside of the code chunk?
 
 <!-------------------------- Start your work below ---------------------------->
-### Dataset1: apt_buildings database
+### Dataset 1: apt_buildings database
 ```{r}
 class(apt_buildings) 
 glimpse(apt_buildings)
@@ -114,8 +117,11 @@ glimpse(cancer_sample)
 
 Similar to the apt_buildings database, two functions were applied to take a first look at the data: 
 - Class type: data.frame that has been coerced into a tibble. spec_tbl_df (short for "spectacular tibble data frame") is a specialized variant of tbl_df. It is designed to handle tabular data with a richer structure.
+
 - Number of rows: 569
+
 - Number of columns: 32
+
 - There are 32 variables to describe about the cancer samples. 
 
 ### Dataset 3: flow_sample database
@@ -124,8 +130,11 @@ class(flow_sample)
 glimpse(flow_sample)
 ```
 - Class type: data.frame that has been coerced into a tibble
+
 - Number of rows: 218
+
 - Number of columns: 7
+
 - There are 7 variables to give information about the water flow level of each station along with specific date, month and year. 
 
 ### Dataset 4: vancouver_trees database
@@ -134,8 +143,11 @@ class(vancouver_trees)
 glimpse(vancouver_trees)
 ```
 - Class type: data.frame that has been coerced into a tibble
+
 - Number of rows: 146611
+
 - Number of columns: 20
+
 - There are 20 variables to give information about trees in Vancouver
 <!----------------------------------------------------------------------------->
 
@@ -183,7 +195,7 @@ In this project, we will use  the dplyr and gglot2 packages included in the tidy
 
 ### Data overview
 
-##### How many columns and rows in the dataset? What are the variables? 
+##### How many columns and rows are there in the dataset? What are the variables? 
 ```{r}
 glimpse(cancer_sample)
 ```
@@ -191,8 +203,11 @@ glimpse(cancer_sample)
 Function glimpse allows us to get a quick impression of the data we are dealing with. The dataset has 569 rows and 32 columns. 
 
 For each sample, we have the following information: 
+
 1. ID: Numerical ID of each sample
+
 2. Diagnosis: The target variable, indicating whether the cancer sample is "M" (Malignant) or "B" (Benign).
+
 3-32: The rest of variables represent various measurements of the samples. These features include mean, standard error, and "worst" measurements for various attributes such as radius, texture, perimeter, area, smoothness, compactness, concavity, concave points, symmetry, and fractal dimension.
 
 The description of each variable was found on the UCI Machine Learning Repository website. 
@@ -206,11 +221,12 @@ We use the summarise function to calculate the total number of unique values in 
 ##### Are there any missing values in the dataset?
 ```{r}
 cancer_sample %>% 
-  summarise_all(~sum(is.na(.))) #is.na means missing value)
+  summarise_all(~sum(is.na(.))) #is.na for missing value)
+
 ```
 There are no missing values in this dataset, which is beneficial for analyzing and exploring relationship between variables. 
 
-### Exercise 1: Plot the distribution of a numeric variable (radius_mean).
+### Exercise 1: Plot the distribution of a numeric variable (radius_mean)
 
 ```{r}
 ggplot(cancer_sample,aes(x=radius_mean)) + # created the dataset and variable
@@ -225,7 +241,7 @@ ggplot(cancer_sample,aes(x=radius_mean)) + # created the dataset and variable
 
 I wanted to make this histogram to view the distribution of mean radius of samples. This is to answer what the range of mean radius for most samples. Based on this graph, we can see that most of the samples have mean radius in a range between 10 to 15. 
 
-### Exercise 2: Explore the relationship between 2 variables in a plot: radius_mean and area_mean.
+### Exercise 2: Explore the relationship between 2 variables in a plot: radius_mean and area_mean
 ```{r}
 ggplot(cancer_sample,aes(x=radius_mean, y=area_mean))+ # set variable for each axis
   # set the color by type of diagnosis (B=Benign, M = Malignant)
@@ -236,6 +252,7 @@ ggplot(cancer_sample,aes(x=radius_mean, y=area_mean))+ # set variable for each a
   labs(title="Relationship between mean radius and mean area of samples ") + # aaded title
   theme_minimal() 
 ```
+
 This exercise is to answer the relationship between mean_area and mean_radius. Based on this graph we can see a proportional relationship between area and radius. Besides, we also realize that the benign samples have smaller area and smaller radius compared to the malignant ones. 
 
 ### Exercise 3: Use a boxplot to look at the frequency of different observations within a single variable.
@@ -248,6 +265,7 @@ ggplot(cancer_sample, aes(x= diagnosis, y = radius_mean,colour = diagnosis)) +
   labs(title="Mean compactness of samples versus diagnosis type ") + # aaded main title
   theme_minimal()
 ```
+
 I choose this exercise also to answer the question if malignant cancer samples are likely to have larger radius than the benign ones. Based on this graph, we can see that there is evidence to believe this hypothesis.
 
 
@@ -255,18 +273,19 @@ I choose this exercise also to answer the question if malignant cancer samples a
 
 ```{r}
 cancer_benign <- cancer_sample %>% 
-  filter(diagnosis == "B") %>% # only pick samples with benign diagnosis
-
+  filter(diagnosis == "B") # only pick samples with benign diagnosis
 print(cancer_benign)
 ```
 
 ```{r}
 cancer_malignant <- cancer_sample %>% 
-  filter(diagnosis == "M") %>% # only pick samples with malignant diagnosis
+  filter(diagnosis == "M") # only pick samples with malignant diagnosis
   
 print(cancer_malignant)
 ```
-I created two subsets of benign and malignant cancer samples because I wanted to know more about the differences between two types of samples. We can calculate the mean, medians, standard deviations or correlation for only benign samples or only malignant samples. 
+
+I created two subsets of benign and malignant cancer samples because I wanted to know more how many benign and malignant samples and analyze about the differences between two types of samples. There are 357 benign and 212 malignant samples
+There are We can calculate the mean, medians, standard deviations or correlation for only benign samples or only malignant samples. 
 
 <!----------------------------------------------------------------------------->
 
