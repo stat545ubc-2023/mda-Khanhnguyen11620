@@ -17,5 +17,5 @@ This repository is for Mini Data Analysis Project 1 for STAT 545 which is made b
    
 **___How to run the code in this repository___**
 - Firstly, you can clone this repository into your GitHub and pull the project to R.
-- Secondly, you need to install `datateachr` and 'tidyverse' packages to do the project (there are instructions in the .Rmd file)
+- Secondly, you need to install `datateachr` and `tidyverse` packages to do the project (there are instructions in the .Rmd file)
 - After completing all the exercises in the project, you need to click 'knit' in Rstudio. It will execute all of the R code chunks and create a new markdown (. md) document which includes the R code and its output. 
