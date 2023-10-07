@@ -1,6 +1,6 @@
 ---
 title: "Mini Data-Analysis Deliverable 1"
-output: html_document
+output: github_document
 ---
 
 # Welcome to your (maybe) first-ever data analysis project!
@@ -112,8 +112,8 @@ class(cancer_sample)
 glimpse(cancer_sample)
 ```
 
-Similar to the apt_buildings database, three functions were applied to take a first look at the data: 
-- Class type: data.frame that has been coerced into a tibble. spec_tbl_df (short for "spectacular tibble data frame") is a specialized variant of tbl_df. It is designed to handle tabular data with a richer structure
+Similar to the apt_buildings database, two functions were applied to take a first look at the data: 
+- Class type: data.frame that has been coerced into a tibble. spec_tbl_df (short for "spectacular tibble data frame") is a specialized variant of tbl_df. It is designed to handle tabular data with a richer structure.
 - Number of rows: 569
 - Number of columns: 32
 - There are 32 variables to describe about the cancer samples. 
@@ -126,7 +126,7 @@ glimpse(flow_sample)
 - Class type: data.frame that has been coerced into a tibble
 - Number of rows: 218
 - Number of columns: 7
-- There are 7 variables to give information about the water level of each station along with specific date, month and year. 
+- There are 7 variables to give information about the water flow level of each station along with specific date, month and year. 
 
 ### Dataset 4: vancouver_trees database
 ```{r}
@@ -142,14 +142,13 @@ glimpse(vancouver_trees)
 1.3 **(1 point)** Now that you've explored the 4 datasets that you were initially most interested in, let's narrow it down to 1. What lead you to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
-I chose cancer_samples database for some reasons. 
-- Firstly, the dataset includes 567 rows and 32 variables. The variables are mostly numerical variables which is often easier to work with in terms of basic statistical analysis, such as calculating means, medians, standard deviations, and correlations. Visualization of numerical data is typically straightforward, with options like histograms, scatter plots, and box plots that provide insights into data distribution and relationships. 
+I chose cancer_samples database. The dataset includes 567 rows and 32 variables. The variables are mostly numerical variables which is often easier to work with in terms of basic statistical analysis, such as calculating means or correlations. Visualization of numerical data is usually straightforward and we have more plot options such as histograms, scatter plots, and box plots which can give information about the relationships between variables. 
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a  final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with your dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
-I want to explore the relationship between the measurements and the type of diagnosis. For example, is the radius (radius_mean) of malignant cancer sample likely to be larger than the one of benigh cancer sample? 
+I want to explore the relationship between the values of measurement and the type of diagnosis. For example, is the radius (radius_mean) of malignant cancer sample likely to be larger than the one of benign cancer sample? 
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -180,10 +179,11 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 <!-------------------------- Start your work below ---------------------------->
 ### Loading the dataset
 
-In this project, we will use mostly the dplyr and gglot2 packages included in the tidyverse packages that we loaded above. dplyr is used for data wrangling while gglot2 is used for data visualization. 
+In this project, we will use  the dplyr and gglot2 packages included in the tidyverse packages that we loaded above. dplyr is used for data wrangling while gglot2 is used for data visualization. 
 
 ### Data overview
 
+##### How many columns and rows in the dataset? What are the variables? 
 ```{r}
 glimpse(cancer_sample)
 ```
@@ -192,72 +192,82 @@ Function glimpse allows us to get a quick impression of the data we are dealing 
 
 For each sample, we have the following information: 
 1. ID: Numerical ID of each sample
-2. Diagnosis: The target variable, indicating whether the biopsy is "M" (Malignant) or "B" (Benign).
+2. Diagnosis: The target variable, indicating whether the cancer sample is "M" (Malignant) or "B" (Benign).
 3-32: The rest of variables represent various measurements of the samples. These features include mean, standard error, and "worst" measurements for various attributes such as radius, texture, perimeter, area, smoothness, compactness, concavity, concave points, symmetry, and fractal dimension.
 
-The description of each variable is found on the UCI Machine Learning Repository website. 
+The description of each variable was found on the UCI Machine Learning Repository website. 
 
-
+##### Are there any duplicate values?
 ```{r}
 cancer_sample %>% summarise(num_samples=length(unique(ID))) 
 ```
 We use the summarise function to calculate the total number of unique values in ID columns which is called num_samples (number of samples). This is to check if there are any duplicates. num_samples is 596 which is equal to number of rows. Therefore, we do not have any duplicates.
 
+##### Are there any missing values in the dataset?
 ```{r}
 cancer_sample %>% 
-  summarise_all(~sum(is.na(.)))
+  summarise_all(~sum(is.na(.))) #is.na means missing value)
 ```
+There are no missing values in this dataset, which is beneficial for analyzing and exploring relationship between variables. 
 
-### Exercise 1: Plot the distribution of a numeric variable.
+### Exercise 1: Plot the distribution of a numeric variable (radius_mean).
 
 ```{r}
-ggplot(cancer_sample,aes(x=radius_mean)) + 
-  geom_histogram(binwidth=.5, colour="black", fill="orange") +
+ggplot(cancer_sample,aes(x=radius_mean)) + # created the dataset and variable
+  #modified binwidth/ colors to make graph look nicer
+  geom_histogram(binwidth=.5, colour="black", fill="orange") + 
   xlab("Mean radius of samples") + # added x-axis label
   ylab("Number of samples")+  # added y-axis label 
   labs(title="Distribution of Mean Radius ")+ # aaded main title
-  theme_minimal()
+  theme_minimal() # for minimalistic and clean design
 
 ```
 
+I wanted to make this histogram to view the distribution of mean radius of samples. This is to answer what the range of mean radius for most samples. Based on this graph, we can see that most of the samples have mean radius in a range between 10 to 15. 
 
-
-### Exercise 2: Explore the relationship between 2 variables in a plot: radius_mean and area_mean .
+### Exercise 2: Explore the relationship between 2 variables in a plot: radius_mean and area_mean.
 ```{r}
-ggplot(cancer_sample,aes(x=radius_mean, y=area_mean))+ 
-  geom_point(aes(color = diagnosis), size = 2, alpha = 0.6) +
-  geom_smooth()+
+ggplot(cancer_sample,aes(x=radius_mean, y=area_mean))+ # set variable for each axis
+  # set the color by type of diagnosis (B=Benign, M = Malignant)
+  geom_point(aes(color = diagnosis), size = 2, alpha = 0.6) + 
+  geom_smooth()+ # added smooth line to clearly show the relationship 
   xlab("Mean radius of samples") + # added x-axis label
   ylab("Mean area of samples")+  # added y-axis label 
-  labs(title="Relationship between mean radius and mean area of samples ") + # aaded main title
-  theme_minimal()
+  labs(title="Relationship between mean radius and mean area of samples ") + # aaded title
+  theme_minimal() 
 ```
+This exercise is to answer the relationship between mean_area and mean_radius. Based on this graph we can see a proportional relationship between area and radius. Besides, we also realize that the benign samples have smaller area and smaller radius compared to the malignant ones. 
 
 ### Exercise 3: Use a boxplot to look at the frequency of different observations within a single variable.
 
 ```{r}
-ggplot(cancer_sample, aes(x= diagnosis, y = compactness_mean,colour = diagnosis)) +
+ggplot(cancer_sample, aes(x= diagnosis, y = radius_mean,colour = diagnosis)) +
   geom_boxplot()+
   xlab("Diagnosis") + # added x-axis label
-  ylab("Mean compactness of samples")+  # added y-axis label 
+  ylab("Mean radius of samples")+  # added y-axis label 
   labs(title="Mean compactness of samples versus diagnosis type ") + # aaded main title
   theme_minimal()
 ```
+I choose this exercise also to answer the question if malignant cancer samples are likely to have larger radius than the benign ones. Based on this graph, we can see that there is evidence to believe this hypothesis.
+
 
 ## Exercise 4: Make a new tibble with a subset of your data, with variables and observations that you are interested in exploring.
 
 ```{r}
 cancer_benign <- cancer_sample %>% 
-  filter(diagnosis == "B") %>% 
+  filter(diagnosis == "B") %>% # only pick samples with benign diagnosis
 
 print(cancer_benign)
 ```
 
 ```{r}
 cancer_malignant <- cancer_sample %>% 
-  filter(diagnosis == "M") %>% 
+  filter(diagnosis == "M") %>% # only pick samples with malignant diagnosis
+  
 print(cancer_malignant)
 ```
+I created two subsets of benign and malignant cancer samples because I wanted to know more about the differences between two types of samples. We can calculate the mean, medians, standard deviations or correlation for only benign samples or only malignant samples. 
+
 <!----------------------------------------------------------------------------->
 
 # Task 3: Choose research questions 
