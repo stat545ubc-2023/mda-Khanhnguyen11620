@@ -84,10 +84,10 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: CHOICE_1\_HERE\
-2: CHOICE_2\_HERE\
-3: CHOICE_3\_HERE\
-4: CHOICE_4\_HERE
+1: apt_buildings
+2: cancer_sample
+3: flow_sample
+4: vancouver_trees
 
 <!----------------------------------------------------------------------------->
 
@@ -96,24 +96,60 @@ And that is exactly the first thing that you will do!
 *Hint:* This is one of those times when you should think about the cleanliness of your analysis. I added a single code chunk for you below, but do you want to use more than one? Would you like to write more comments outside of the code chunk?
 
 <!-------------------------- Start your work below ---------------------------->
-
+### Dataset1: apt_buildings database
 ```{r}
-### EXPLORE HERE ###
-steam_games
+class(apt_buildings) 
+glimpse(apt_buildings)
 ```
 
+First of all, we used two functions to get to know about the apt_buildings dataset. 
+- class() function shows us the class type of data. In this case, the apt_buildings dataset was originally a data.frame that has been coerced into a tibble ("tbl" and "tbl_df"). 
+- glimpse() function show us about the number of rows, number of columns and name of each column/variable in the dataset. From the results above, this data has 3455 rows and 37 columns/variables.
+
+### Dataset 2: cancer_samples database
+```{r}
+class(cancer_sample)
+glimpse(cancer_sample)
+```
+
+Similar to the apt_buildings database, three functions were applied to take a first look at the data: 
+- Class type: data.frame that has been coerced into a tibble. spec_tbl_df (short for "spectacular tibble data frame") is a specialized variant of tbl_df. It is designed to handle tabular data with a richer structure
+- Number of rows: 569
+- Number of columns: 32
+- There are 32 variables to describe about the cancer samples. 
+
+### Dataset 3: flow_sample database
+```{r}
+class(flow_sample)
+glimpse(flow_sample)
+```
+- Class type: data.frame that has been coerced into a tibble
+- Number of rows: 218
+- Number of columns: 7
+- There are 7 variables to give information about the water level of each station along with specific date, month and year. 
+
+### Dataset 4: vancouver_trees database
+```{r}
+class(vancouver_trees)
+glimpse(vancouver_trees)
+```
+- Class type: data.frame that has been coerced into a tibble
+- Number of rows: 146611
+- Number of columns: 20
+- There are 20 variables to give information about trees in Vancouver
 <!----------------------------------------------------------------------------->
 
 1.3 **(1 point)** Now that you've explored the 4 datasets that you were initially most interested in, let's narrow it down to 1. What lead you to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
-
+I chose cancer_samples database for some reasons. 
+- Firstly, the dataset includes 567 rows and 32 variables. The variables are mostly numerical variables which is often easier to work with in terms of basic statistical analysis, such as calculating means, medians, standard deviations, and correlations. Visualization of numerical data is typically straightforward, with options like histograms, scatter plots, and box plots that provide insights into data distribution and relationships. 
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a  final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with your dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
-
+I want to explore the relationship between the measurements and the type of diagnosis. For example, is the radius (radius_mean) of malignant cancer sample likely to be larger than the one of benigh cancer sample? 
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -142,7 +178,86 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 2.2 **(4 points)** For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+### Loading the dataset
 
+In this project, we will use mostly the dplyr and gglot2 packages included in the tidyverse packages that we loaded above. dplyr is used for data wrangling while gglot2 is used for data visualization. 
+
+### Data overview
+
+```{r}
+glimpse(cancer_sample)
+```
+
+Function glimpse allows us to get a quick impression of the data we are dealing with. The dataset has 569 rows and 32 columns. 
+
+For each sample, we have the following information: 
+1. ID: Numerical ID of each sample
+2. Diagnosis: The target variable, indicating whether the biopsy is "M" (Malignant) or "B" (Benign).
+3-32: The rest of variables represent various measurements of the samples. These features include mean, standard error, and "worst" measurements for various attributes such as radius, texture, perimeter, area, smoothness, compactness, concavity, concave points, symmetry, and fractal dimension.
+
+The description of each variable is found on the UCI Machine Learning Repository website. 
+
+
+```{r}
+cancer_sample %>% summarise(num_samples=length(unique(ID))) 
+```
+We use the summarise function to calculate the total number of unique values in ID columns which is called num_samples (number of samples). This is to check if there are any duplicates. num_samples is 596 which is equal to number of rows. Therefore, we do not have any duplicates.
+
+```{r}
+cancer_sample %>% 
+  summarise_all(~sum(is.na(.)))
+```
+
+### Exercise 1: Plot the distribution of a numeric variable.
+
+```{r}
+ggplot(cancer_sample,aes(x=radius_mean)) + 
+  geom_histogram(binwidth=.5, colour="black", fill="orange") +
+  xlab("Mean radius of samples") + # added x-axis label
+  ylab("Number of samples")+  # added y-axis label 
+  labs(title="Distribution of Mean Radius ")+ # aaded main title
+  theme_minimal()
+
+```
+
+
+
+### Exercise 2: Explore the relationship between 2 variables in a plot: radius_mean and area_mean .
+```{r}
+ggplot(cancer_sample,aes(x=radius_mean, y=area_mean))+ 
+  geom_point(aes(color = diagnosis), size = 2, alpha = 0.6) +
+  geom_smooth()+
+  xlab("Mean radius of samples") + # added x-axis label
+  ylab("Mean area of samples")+  # added y-axis label 
+  labs(title="Relationship between mean radius and mean area of samples ") + # aaded main title
+  theme_minimal()
+```
+
+### Exercise 3: Use a boxplot to look at the frequency of different observations within a single variable.
+
+```{r}
+ggplot(cancer_sample, aes(x= diagnosis, y = compactness_mean,colour = diagnosis)) +
+  geom_boxplot()+
+  xlab("Diagnosis") + # added x-axis label
+  ylab("Mean compactness of samples")+  # added y-axis label 
+  labs(title="Mean compactness of samples versus diagnosis type ") + # aaded main title
+  theme_minimal()
+```
+
+## Exercise 4: Make a new tibble with a subset of your data, with variables and observations that you are interested in exploring.
+
+```{r}
+cancer_benign <- cancer_sample %>% 
+  filter(diagnosis == "B") %>% 
+
+print(cancer_benign)
+```
+
+```{r}
+cancer_malignant <- cancer_sample %>% 
+  filter(diagnosis == "M") %>% 
+print(cancer_malignant)
+```
 <!----------------------------------------------------------------------------->
 
 # Task 3: Choose research questions 
@@ -150,6 +265,15 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 **(4 points)** So far, you have chosen a dataset and gotten familiar with it through exploring the data. You have also brainstormed one research question that interested you (Task 1.4).  Now it's time to pick 4 research questions that you would like to explore in Milestone 2! Write the 4 questions and any additional comments below. 
 
 <!--- *****START HERE***** --->
+My main research interest in this database is to explore the differences between malignant and benign cancer samples. Below are my 4 research questions:
+
+1. Are the malignant cancer sample likely to have larger size (radius, perimeter and area) than the one of benign cancer sample? 
+
+2. What are the difference between the appearance of malignant and benign cancer samples (smoothness, compactness)
+
+3. Does the numer of concave points differ between malignant and benign cancer samples? 
+
+4. Which parameters were used to measure/calculate the values of texture, symmetry ans fractional dimension variables? Are these three variables related to the type of cancer samples (malignant or benign)?
 
 <!----------------------------->
 
