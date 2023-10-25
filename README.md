@@ -11,10 +11,20 @@ This repository is for Mini Data Analysis Project 1 for STAT 545 which is made b
 
 **___Files in the GitHub repository___**
 
-1. mini-project-1-Khanh Nguyen.Rmd: This document is for doing data analysis assignments. The Rmd file includes markdown (content with simple text formatting) and R code chunks.
-2. mini-project-1-Khanh Nguyen.md: This document is created when we click 'knit' in Rstudio, it will execute all of the R code chunks and create a new markdown (. md) document which includes the R code and its output.
-3. README.md: This document provides context and how-to instructions for the project
-   
+There are three folders 
+1. Milestone 1 includes:
+   - mini-project-1-Khanh Nguyen.Rmd: This document is for doing data analysis assignments. The Rmd file includes markdown          (content with simple text formatting) and R code chunks.
+   - mini-project-1-Khanh Nguyen.md: This document is created when we click 'knit' in Rstudio, it will execute all of the R          code chunks and create a new markdown (. md) document which includes the R code and its output.
+   - README.md: This document provides context and how-to instructions for the project
+
+3. Milestone 2 includes:
+   - mini-project-2-Khanh Nguyen.Rmd: This document is for doing data analysis assignments. The Rmd file includes markdown          (content with simple text formatting) and R code chunks.
+   - mini-project-2-Khanh Nguyen.md: This document is created when we click 'knit' in Rstudio, it will execute all of the R          code chunks and create a new markdown (. md) document which includes the R code and its output.
+   - README.md: This document provides context and how-to instructions for the project
+
+4. Output includes:
+   - Summary table (.csv) and model object(.rds) files of milestone 2. These were saved and exported by using write_csv() and       saveRDS(), respectively.
+     
 **___How to run the code in this repository___**
 - Firstly, you can clone this repository into your GitHub and pull the project to R.
 - Secondly, you need to install `datateachr` and `tidyverse` packages to do the project (there are instructions in the .Rmd file)
