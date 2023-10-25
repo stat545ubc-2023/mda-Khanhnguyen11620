@@ -1,6 +1,6 @@
 ---
 title: "Mini Data Analysis Milestone 2"
-output: html_document
+output: github_document
 ---
 
 *To complete this milestone, you can either edit [this `.rmd` file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-2.Rmd) directly. Fill in the sections that are commented out with `<!--- start your work here--->`. When you are done, make sure to knit to an `.md` file by changing the output in the YAML header to `github_document`, before submitting a tagged release on canvas.*
@@ -58,7 +58,7 @@ First, write out the 4 research questions you defined in milestone 1 were. This 
 <!-------------------------- Start your work below ---------------------------->
 1. *Are the malignant cancer sample likely to have larger size (radius, perimeter and area) than the one of benign cancer sample?*
 
-2. *What are the difference between the appearance of malignant and benign cancer samples (smoothness, compactness)/ Is*
+2. *What are the difference between the appearance of malignant and benign cancer samples (smoothness, compactness)*
 
 3. *Does the number of concave points differ between malignant and benign cancer samples?/Does larger samples (larger radius) have more concave points?*
 
@@ -97,7 +97,7 @@ Make sure it's clear what research question you are doing each operation for!
 <!------------------------- Start your work below ----------------------------->
 ### Loading the package
 
-In this project, we will use  the dplyr, gglot2 and tidyr packages included in the tidyverse packages. dplyr is used for data wrangling, gglot2 is used for data visualization and tidyr is used for data cleaning.
+In this project, we will use  the dplyr, gglot2 and tidyr packages included in the tidyverse packages. `dplyr` is used for data wrangling, `ggplot2` is used for data visualization and `tidyr` is used for data cleaning.
 
 ```{r}
 library(tidyverse)
@@ -106,9 +106,10 @@ library(tidyverse)
 #### Question 1: Are the malignant cancer sample likely to have larger size (radius, perimeter and area) than the one of benign cancer sample?
 
 ###### 1. Summarizing
+
 Compute the *range*, *mean*, and *two other summary statistics* of **one numerical variable** across the groups of **one categorical variable** from your data.
 
-In the question, I mentioned three variables (radius, perimeter and area), I will compute for the radius as an example in this case because perimeter and area are calculated based on radius
+In the question, I mentioned three variables (radius, perimeter and area), I will compute for the radius as an example in this case because perimeter and area are calculated based on radius. 
 
 ```{r}
 radius_stat<- cancer_sample %>% 
@@ -121,11 +122,12 @@ radius_stat<- cancer_sample %>%
 print(radius_stat)
 ```
 
-These data can directly give us an overview when comparing radius of each type of diagonsis (B =benign and M= malignant). 
-By looking at the values of min value, max value and mean value of radius, we can see that the radius of benign cancer samples are generally smaller than the malignant ones. 
+These data can directly give us an overview when comparing radius_mean of each type of diagnosis (B =benign and M= malignant). By looking at the values of min value, max value and mean value of radius, we can see that the radius of benign cancer samples are generally smaller than the malignant ones. 
 
 ###### 2. Graphing: 
-9. Create 3 histograms, with each histogram having different sized bins. Pick the "best" one and explain why it is the best.
+
+Create 3 histograms, with each histogram having different sized bins. Pick the "best" one and explain why it is the best.
+
 ##### Binwidth = 0.5
 ```{r}
 ggplot(cancer_sample,aes(x=radius_mean)) + # created the dataset and variable
@@ -148,7 +150,9 @@ ggplot(cancer_sample,aes(x=radius_mean)) + # created the dataset and variable
   labs(title="Distribution of Mean Radius (Binwidth = 2.5) ")+ # aaded main title
   theme_minimal() # for minimalistic and clean design
 ```
+
 ##### Binwidth = 5
+
 ```{r}
 ggplot(cancer_sample,aes(x=radius_mean)) + # created the dataset and variable
   #modified binwidth/ colors to make graph look nicer
@@ -158,9 +162,8 @@ ggplot(cancer_sample,aes(x=radius_mean)) + # created the dataset and variable
   labs(title="Distribution of Mean Radius (Binwidth = 5) ")+ # aaded main title
   theme_minimal() # for minimalistic and clean design
 ```
-The binwidth = 0.5 is the best when it offers a detailed information of the radius value's range. Binwidth = 2.5 is still good to look at but some information is lost ()
 
-Binwidth = 5 is too large and hard to see
+The binwidth = 0.5 is the best option when it can offers a detailed information of the radius value's range. Binwidth = 2.5 is still good to look at but some information is lost. Binwidth = 5 is too large and hard to see
 
 #### Question 2: What are the difference between the appearance of malignant and benign cancer samples (smoothness, compactness)
 
@@ -168,7 +171,7 @@ Binwidth = 5 is too large and hard to see
 
 Create a categorical variable with 3 or more groups from an existing numerical variable. You can use this new variable in the other tasks! *An example: age in years into "child, teen, adult, senior". 
 
-In the question, I mentioned two variables (smoothness, compactness), I will compute for the smoothness variable as an example in this case. I want to create 4 groups of smoothness levels: low,  fair, good and very good. To determine which numeric threshold of each level. I calculated the minimum, first quartile (Q1), median (Q2), mean, third quartile (Q3), and maximum values for smoothness variable.
+In the question, I mentioned two variables (smoothness, compactness), I will compute for the smoothness variable as an example in this case. I want to create 4 groups of smoothness levels: low,  fair, good and very good. To determine the threshold of each level. I calculated the minimum, first quartile (Q1), median (Q2), mean, third quartile (Q3), and maximum values for smoothness variable.
 
 ```{r}
 summary(cancer_sample$smoothness_mean)
@@ -184,6 +187,8 @@ smooth_level <- cancer_sample %>%
 print(smooth_level[, c("smoothness_mean", "smooth_level")])
 ```
 
+By creating this new categorical column, a bar chart or boxplot can help us visualize the distribution of smoothness level between two type of diagnosis.
+
 ###### 2. Graphing: 
 
 Create a graph that has at least two geom layers. 
@@ -198,7 +203,10 @@ ggplot(cancer_sample,aes(x=smoothness_mean, y=compactness_mean))+ # set variable
   labs(title="Relationship between mean smoothness and mean compactness of samples ") + # aaded title
   theme_minimal() 
 ```
-This exercise is to answer the relationship between smoothness_mean and compactness_mean Based on this graph we can see a proportional relationship between smoothness and compactness. Besides, we also realize that: 
+
+This exercise is to answer the relationship between smoothness_mean and compactness_mean. Based on this graph we can see a slightly proportional relationship between smoothness and compactness. 
+
+Besides, we also realize that: 
 - for smoothness: there is no significant difference in smoothness between the benign samples and malignant samples 
 - for the compactness: the benign samples have lower compactness compared to the malignant ones. 
 
@@ -221,18 +229,21 @@ print(concave_points_stats)
 ```
 
 These data can directly give us an overview when comparing number of concave points of each type of diagonsis (B =benign and M= malignant). 
+
 By looking at the values of min value, max value and mean value of concave points, we can see that the benign cancer samples have less concave points than the malignant ones.
 
 ###### 2. Graphing: 
  
- Make a graph where it makes sense to customize the alpha transparency
+Make a graph where it makes sense to customize the alpha transparency
+
 ```{r}
 ggplot(cancer_sample, aes(x = concave_points_mean, fill = diagnosis)) +
   geom_density(alpha = 1) +
   labs(title = "Density Plot of concave points for each type of diagnosis", x = "Mean Concave Points", y = "Density") +
   scale_fill_discrete(name = "Group")
 ```
-If the transparency (alpha = 1), the graph is difficult to see. Change to transparency to 0.5 or 0.6 will make the graph look nicer (see below)
+
+If the transparency (alpha = 1), the graph is difficult to see. Change to transparency to 0.5 or 0.6 will make the graph look nicer (graph shown below)
 
 ```{r}
 ggplot(cancer_sample, aes(x = concave_points_mean, fill = diagnosis)) +
@@ -241,19 +252,18 @@ ggplot(cancer_sample, aes(x = concave_points_mean, fill = diagnosis)) +
   scale_fill_discrete(name = "Group")
 ```
 
-Once again, These data can directly give us an overview when comparing number of concave points of each type of diagonsis (B =benign and M= malignant). 
-By looking at the values of min value, max value and mean value of concave points, we can see that the benign cancer samples have less concave points than the malignant ones.
+Once again, by looking at this graph, we can see that the benign cancer samples have less concave points than the malignant ones.
 
 #### Question 4: Which parameters were used to measure/calculate the values of texture, symmetry and fractional dimension variables? Are these three variables related to the type of cancer samples (malignant or benign)?
 
-I did a research on which parameters are used to measure or calculate the values of texture, symmetry and fractional dimension variables on UCI Machine Learning Repository, however, there is no information about this. Therefore, I will work with the latter question: Are these three variables related to the type of cancer samples (malignant or benign). I will choose to work with *symmetry variable* as an example. 
+I did a research on which parameters are used to measure or calculate the values of texture, symmetry and fractional dimension variables on UCI Machine Learning Repository, however, there is no information about this. Therefore, I will work with the latter question: Are these three variables related to the type of cancer samples (malignant or benign). I will choose to work with symmetry variable as an example. 
 
-The approach is similar to what we have done with radius, smoothness, compactness or concave points. My goal for this data analysis is to understand the difference between benign and maligant cancer samples based on the provided variables. 
+The approach is similar to what we have done with radius, smoothness, compactness or concave points. My goal for this data analysis is to understand the difference between benign and malignant cancer samples based on the provided variables. 
 
 ###### 1. Summarizing
 Create a categorical variable with 3 or more groups from an existing numerical variable. You can use this new variable in the other tasks! *An example: age in years into "child, teen, adult, senior".*
 
-Since my original dataset only contain one catogorical variable (diagnosis), therefore, I want to create a new categorical variable as symmery levels: low,  moderate, high and very high To determine which numeric threshold of each level. I calculated the minimum, first quartile (Q1), median (Q2), mean, third quartile (Q3), and maximum values for symmetry variable.
+Since my original dataset only contain one catogorical variable (diagnosis), therefore, I want to create a new categorical variable as symmetry levels: low,  moderate, high and very high. To determine the threshold of each level. I calculated the minimum, first quartile (Q1), median (Q2), mean, third quartile (Q3), and maximum values for symmetry variable.
 
 ```{r}
 summary(cancer_sample$symmetry_mean)
@@ -270,9 +280,10 @@ print(symmetry_level[, c("symmetry_mean", "symmetry_level")])
 ```
 
 ###### 2. Graphing 
-Create a graph of your choosing, make one of the axes logarithmic, and format the axes labels so that they are "pretty" or easier to read
+Create a graph that has at least two geom layers. 
 
 The symmetry variable seems vague to us when we do not know this variable is measure. Therefore, I want to see the relationship between symmetry and other number of concave points. 
+
 ```{r}
 ggplot(cancer_sample,aes(x=symmetry_mean, y= concave_points_mean))+ # set variable for each axis
   geom_point(size = 2) +
@@ -286,6 +297,7 @@ ggplot(cancer_sample,aes(x=symmetry_mean, y= concave_points_mean))+ # set variab
 Based on the graph above, we do not see a clear relationship between these two variables. 
 
 Besides, I also want to see if there is any difference in the symmetry level between two types of diagnosis by plotting the boxplot graph. 
+
 ```{r}
 ggplot(cancer_sample, aes(x= diagnosis, y = symmetry_mean,colour = diagnosis)) +
   geom_boxplot()+
@@ -294,6 +306,7 @@ ggplot(cancer_sample, aes(x= diagnosis, y = symmetry_mean,colour = diagnosis)) +
   labs(title="Mean symmetry of samples versus diagnosis type ") + # aaded main title
   theme_minimal()
 ```
+
 Based on the graph above, the benign samples seem to be less symmetric than the malignant ones. However, the difference is not significant. 
 
 <!----------------------------------------------------------------------------->
@@ -315,15 +328,15 @@ Based on this graph we can see a proportional relationship between smoothness an
 
 __Question 3: Does the number of concave points differ between malignant and benign cancer samples?/Does larger samples (larger radius) have more concave points?__
 
-These data obtain the part 1.2 can directly give us an overview when comparing number of concave points of each type of diagonsis (B =benign and M= malignant). 
-By looking at the values of min value, max value and mean value of concave points, we can see that the benign cancer samples have less concave points than the malignant ones. 
-Since the malignant sample have larger radius than benign samples (results in question 1), we can rephrase the results that that larger radius samples (malignant) have more concave points than smaller radius sample (benign). 
+These data obtain the part 1.2 can directly give us an overview when comparing number of concave points of each type of diagnosis (B =benign and M= malignant). By looking at the values of min value, max value and mean value of concave points, we can see that the benign cancer samples have less concave points than the malignant ones. 
+
+Since the malignant samples are shown to have larger radius than benign samples (results in question 1), we can rephrase the results that that larger radius samples (malignant) are likely to have more concave points than smaller radius sample (benign). 
 
 __Question 4:Which parameters were used to measure/calculate the values of texture, symmetry ans fractional dimension variables? Are these three variables related to the type of cancer samples (malignant or benign)?__
 
 Based on the graph above, the benign samples seem to be less symmetric than the malignant ones. However, the difference is not significant.
 
-Besides, the texture and fractional dimension variables are still remained unclear to us because we do not know which parameters are used to measure or calculate the values. I took a look on UCI Machine Learning Repository where the database was downloaded, however, there is no information about this. Therefore, it is difficult to understand to compare these two variables between two types of diagnosis. 
+Besides, the texture and fractional dimension variables are still remained unclear to us because we do not know which parameters are used to measure or calculate the values. I took a look on UCI Machine Learning Repository where the database was downloaded, however, there is no information about this. Therefore, it is difficult to understand and  compare these two variables between two types of diagnosis. 
 <!----------------------------------------------------------------------------->
 
 # Task 2: Tidy your data 
@@ -342,12 +355,14 @@ Based on the definition above, can you identify if your data is tidy or untidy? 
 
 <!--------------------------- Start your work below --------------------------->
 
-First, we will create a subset data with first 8 variables of the cancer_sample database since my data has more than 8 variables  
+First, we will create a subset data with first 8 variables of the cancer_sample database since my data has more than 8 variables. 
+
 ```{r}
 cancer_subset<-cancer_sample[,1:8]
 head(cancer_subset)
 
 ```
+
 Now we will go through each criteria to see if our data is tidy or untidy.
 __1. Each row is an observation__: 
 
@@ -357,7 +372,7 @@ nrow(cancer_subset) # how many rows in the database
 
 ```
 
-We can see that the number of rows is same as number of samples in database
+We can see that the number of rows is same as number of samples in database so each row in th data is an observation
 
 __2. Each column is a variable__: 
 
@@ -367,11 +382,11 @@ print(num_variables)
 names(cancer_subset) #name all the variables of database
 ```
 
-We have 8 variables  and each of these have it own respective column. 
+We have 8 variables and each of these have it own respective column. 
 
 __3. Each cell is a value__: 
 
-Each cell in the database contain only one value corresponding to the one sample and its variable. 
+Each cell in the database contain only one value corresponding to the one sample and one variable. 
 
 Based on three criteria above, the cancer_subset is tidy (the cancer_sample is tidy as well because cancer_subset is its subset database and they have same structure). 
 <!----------------------------------------------------------------------------->
@@ -385,6 +400,7 @@ If your data is untidy, then tidy it! Then, untidy it back to it's original stat
 Be sure to explain your reasoning for this task. Show us the "before" and "after".
 
 <!--------------------------- Start your work below --------------------------->
+
 My data is tidy, therefore, I will untidy it and then tidy again.
 
 #### Orginal data
@@ -392,6 +408,9 @@ My data is tidy, therefore, I will untidy it and then tidy again.
 ```{r}
 head(cancer_subset)
 ```
+
+Here, we can see three criteria in a tidy data: each row is an **observation**, each column is a **variable** and each cell is a **value**. 
+
 #### Untidy the data
 
 ```{r}
@@ -403,9 +422,9 @@ cancer_untidy <- cancer_sample %>%
 print(cancer_untidy)
 ```
 
-As we can see now in the table above, when we untidy the data, the number of rows increases and the multiple rows describe one sample instead of one row for each observation. 
+As we can see now in the table above, when we untidy the data, the number of rows increases and the multiple rows describe one sample/observation instead of one row for each sample/observation. 
 
-#### No we tidy the data again: 
+#### Now we tidy the data again: 
 
 ```{r}
 cancer_tidy <-cancer_untidy %>% 
@@ -414,7 +433,8 @@ cancer_tidy <-cancer_untidy %>%
 print(cancer_tidy)
 ```
 
-By using pivot_wider(), I was able to edit the data to be tidy again (original format). 
+By using pivot_wider(), I was able to edit the data to be tidy again (original format: each row is an **observation**, each column is a **variable** and each cell is a **value**).
+
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (4 points)
@@ -432,7 +452,7 @@ Explain your decision for choosing the above two research questions.
 <!--------------------------- Start your work below --------------------------->
 - For the first question, I can see a clear relationship between the size of samples and the type of diagnosis. I want to further investigate this hypothesis with different types of modelling/statistical testing. 
 
-- For the second question, I can also see that the difference in the number of concave points between two types of diagnosis. It is predicted that there is a proprotional relationship between radius_mean and concave_point_mean. It is a good option to do more modelling (regression model) or other statistical test on this prediction. 
+- For the second question, I can also see that the difference in the number of concave points between two types of diagnosis. It is predicted that there is a proportional relationship between radius_mean and concave_point_mean. It is a good option to do more modelling (regression model) or other statistical test on this prediction. 
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be appropriate to answer these 2 questions. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelevant columns, etc.).
@@ -459,6 +479,7 @@ cancer_radius <- cancer_sample %>%
                                                 TRUE ~ "very large")) 
 glimpse(cancer_radius)
 ```
+
 __For question 2: Concave_points_mean variable__
 
 ```{r}
@@ -468,7 +489,7 @@ summary(cancer_sample$concave_points_mean) # quartiles values to create categori
 ```{r}
 cancer_concave <- cancer_sample %>% 
   select(ends_with("mean")) %>% #only select the variables which end with 'mean'
-  filter(!is.na(concave_points_mean)) %>%  # filter NA values in radius_mean column
+  filter(!is.na(concave_points_mean)) %>%  # filter NA values in concave_points_mean column
   arrange(concave_points_mean) %>% #sort the value from smallest to largest
   mutate(concave_points_level = case_when(concave_points_mean < 0.02031 ~ "small",
                                                 concave_points_mean < 0.04892 ~ "medium",
@@ -484,7 +505,7 @@ Pick a research question from 1.2, and pick a variable of interest (we'll call i
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: Are the larger radius sample likely to have more concave points than the smaller radius cancer  sample?
+**Research Question**: Are the larger radius samples likely to have more concave points than the smaller radius cancer samples?
 
 **Variable of interest**:
 Response variable: Concave_points_mean
@@ -503,13 +524,14 @@ Fit a model or run a hypothesis test that provides insight on this variable with
 
 <!-------------------------- Start your work below ---------------------------->
 
-We will fit a linear regression between concave_points_mean (Y - response variable) and radius_mean (X - explanatory variable) using function lm()
+We will fit a linear regression between concave_points_mean (Y - response variable) and radius_mean (X - explanatory variable) using function lm().
+
 ```{r}
 Fit1 <- lm(concave_points_mean ~ radius_mean,cancer_sample)  
 summary(Fit1)
 ```
 
-Now we will visualize the relationship between concave_points_mean and radius
+Now we will visualize the relationship between concave_points_mean and radius_mean.
 
 ```{r}
 ggplot(cancer_sample,aes(x=radius_mean, y= concave_points_mean))+ # set variable for each axis
@@ -534,7 +556,8 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 
 <!-------------------------- Start your work below ---------------------------->
 
-In 3.1, by using summary (Fit1), I was able to generate the regression coefficient and p-value. However, we can still produce regression coefficients and p-value by using the function tidy() function of `broom` package. 
+In 3.1, by using summary (Fit1), I was able to generate the regression coefficient and p-value. However, we can still produce regression coefficients and p-value by using the function tidy() function of `broom` package.
+
 ```{r}
 Fit_value <- broom::tidy(Fit1)
 print(Fit_value)
@@ -556,9 +579,14 @@ Take a summary table that you made from Task 1, and write it as a csv file in yo
 <!-------------------------- Start your work below ---------------------------->
 
 First, I will load the library to use the here() function. Then I will write the radius_stat summary table in the Task 1 as a csv file in the out put folder
+
 ```{r}
 library(here) #load the library to use here() function
-here()
+here() # see our current directory
+```
+
+
+```{r}
 write_csv(radius_stat,here::here("output","radius_stat.csv"))
 ```
 
