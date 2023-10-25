@@ -322,8 +322,10 @@ I only worked with radius variable in the part 1.2 as an example because perimet
 
 __Question 2: What are the difference between the appearance of malignant and benign cancer samples (smoothness, compactness)__
 
-Based on this graph we can see a proportional relationship between smoothness and compactness. Besides, we also realize that: 
+Based on this graph we can see a proportional relationship between smoothness and compactness. Besides, we also realize that:
+
 - for smoothness: there is no significant difference in smoothness between the benign samples and malignant samples
+
 - for the compactness: the benign samples have lower compactness compared to the malignant ones. 
 
 __Question 3: Does the number of concave points differ between malignant and benign cancer samples?/Does larger samples (larger radius) have more concave points?__
@@ -364,6 +366,7 @@ head(cancer_subset)
 ```
 
 Now we will go through each criteria to see if our data is tidy or untidy.
+
 __1. Each row is an observation__: 
 
 ```{r}
@@ -417,9 +420,9 @@ Here, we can see three criteria in a tidy data: each row is an **observation**, 
 cancer_untidy <- cancer_sample %>% 
   pivot_longer(cols = c(radius_mean:fractal_dimension_worst), 
                names_to  = c("Measured Variables"), 
-               values_to = c("Values"))  %>% 
+               values_to = c("Values")) 
 
-print(cancer_untidy)
+head(cancer_untidy)
 ```
 
 As we can see now in the table above, when we untidy the data, the number of rows increases and the multiple rows describe one sample/observation instead of one row for each sample/observation. 
@@ -450,6 +453,7 @@ Now, you should be more familiar with your data, and also have made progress in 
 
 Explain your decision for choosing the above two research questions.
 <!--------------------------- Start your work below --------------------------->
+
 - For the first question, I can see a clear relationship between the size of samples and the type of diagnosis. I want to further investigate this hypothesis with different types of modelling/statistical testing. 
 
 - For the second question, I can also see that the difference in the number of concave points between two types of diagnosis. It is predicted that there is a proportional relationship between radius_mean and concave_point_mean. It is a good option to do more modelling (regression model) or other statistical test on this prediction. 
@@ -508,8 +512,7 @@ Pick a research question from 1.2, and pick a variable of interest (we'll call i
 **Research Question**: Are the larger radius samples likely to have more concave points than the smaller radius cancer samples?
 
 **Variable of interest**:
-Response variable: Concave_points_mean
-Explanatory variable: Radius_mean
+Response variable: Concave_points_mean. Explanatory variable: Radius_mean
 <!----------------------------------------------------------------------------->
 
 ## 3.1 (3 points)
@@ -542,6 +545,7 @@ ggplot(cancer_sample,aes(x=radius_mean, y= concave_points_mean))+ # set variable
   labs(title="Relationship between mean radius and mean concave points of samples ") + # aaded title
   theme_minimal() 
 ```
+
 By looking at the graph, we can see a proportional relationship between concave_points_mean and radius_mean. Besides, we also have the p-value < 0.05. 
 
 <!----------------------------------------------------------------------------->
@@ -582,7 +586,6 @@ First, I will load the library to use the here() function. Then I will write the
 
 ```{r}
 library(here) #load the library to use here() function
-here() # see our current directory
 ```
 
 
